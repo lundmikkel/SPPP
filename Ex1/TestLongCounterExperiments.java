@@ -3,7 +3,6 @@ package dk.itu.sppp.ex1;
 // sestoft@itu.dk * 2014-08-21
 
 /**
- * @author Hyllekilde
  * Question 1:
  * If the increment() method is not synchronized then you cannot be sure of what the final value of count will be.
  * Two threads will be able to call the method simultaneously where one of the calls overwrites the other and thus
@@ -14,13 +13,13 @@ package dk.itu.sppp.ex1;
  * wrong as it will have the risk of performing an inaccurate number of increments of count.
  * 
  * Question 3:
- * No, the different ways of incrementing the count results in the same error. All the statements perform several
- * statements to increment count and thus are open to thread interference.
+ * No, the different ways of incrementing the count results in the same error. The statements are all compound
+ * statements (check-modify-write sequences) that must execute atomatically to be thread-safe.
  * 
  * Question 4:
- * The final count should be 0 as both methods are synchronized and shares uses the same intrinsic lock of the
- * LongCounter object. Thus, it is not possible for them to execute the method calls at the same time as they have a
- * happen-before relationship.
+ * The final count is expected to be 0. If not both methods are synchronized and share the same intrinsic lock of the
+ * LongCounter object, the operations could get interleved. Though the two threads call different methods, they still
+ * act on the same mutable shared state.
  * 
  * Question 5:
  * I think the explanation for the incorrect final values of each of the four examples is given above.
