@@ -10,13 +10,13 @@ package dk.itu.sppp.ex1;
  * 3. t1 sleeps after printing '-'
  * 4. t2 print '-' while t1 sleeps
  * 5. t1 print '|' after catching an interruptedException
- * 6. t2 print '-' after sleep or when catching an interruptedException
+ * 6. t2 print '|' after sleep or when catching an interruptedException
  * This will print ||--
  * 
  * Question 2:
  * Making print() synchronized prevents thread interference so the print method will be atomic.
  * The intrinsic lock of the Printer object can only be held by one thread and thus only one thread
- * can execute the method at a given time.
+ * can execute the method at a given time. Thus the thread will still have the lock while sleeping.	
  */
 public class Ex1_3 {
 	public static void main(String[] args) {
@@ -48,9 +48,10 @@ class Printer {
 		System.out.print("-");
 		try {
 			Thread.sleep(50);
-		} catch (InterruptedException exn) {
-			
 		}
+		catch (InterruptedException exn)
+		{}
+
 		System.out.print("|");
-		}
+	}
 }
