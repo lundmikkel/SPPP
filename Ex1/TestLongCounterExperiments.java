@@ -25,11 +25,10 @@ package dk.itu.sppp.ex1;
  * I think the explanation for the incorrect final values of each of the four examples is given above.
  * i)	The methods will be executed simultaneously and thus will cause thread interferences.
  * 		15280, 20441, -3364
- * ii)	If only one method is synchronized the other method can be executed one or several times 
- * 		causing thread interference and a wrong final count value.
+ * ii)	If only one method is synchronized it is not possible to control the lock and thus the count value is not predictable.
  * 		4701, 38383, 25257
  * iii)	Same as above.
- * iv)	Atomic executions. The synchonization makes them share the object's intrinsic lock
+ * iv)	The synchonization makes them share the object's intrinsic lock which ensures atomic executions.
  * 		0, 0, 0 and 0
  */
 public class TestLongCounterExperiments {
