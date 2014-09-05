@@ -122,6 +122,13 @@ Exercise 2.4
 
 Question 1
 ----------
-It is important to make the <code>cache</code> variable volitile to ensure that
+It is important to make the <code>cache</code> variable volatile to ensure that
 all threads have the same object, i.e. the most current version of the cache.
-Leaving out the <code>volatile</code> keyword will not produce 
+Leaving out the <code>volatile</code> keyword will not produce an incorrect answer
+in this case, but it will ruin the original intention of the cache.
+
+
+Question 2
+----------
+Both of the fields in <code>OneValueCache</code> needs to be final in order to make
+the object immutable. This is also ensured by not making a setter for the fields.
