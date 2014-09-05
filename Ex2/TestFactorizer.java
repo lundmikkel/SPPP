@@ -179,11 +179,13 @@ class CachingFactorizer implements Factorizer {
 // Like Goetz p. 50.
 class VolatileCachingFactorizer implements Factorizer {
     private volatile OneValueCache cache = new OneValueCache(0, null);
-    
+    final AtomicLong al = new AtomicLong(0);
+
     public long[] getFactors(long p) {
         long[] factors = cache.getFactors(p);
         if (factors == null) {
             factors = PrimeFactors.compute(p);
+            al.incrementAndGet();
             cache = new OneValueCache(p, factors);
         }
         return factors;
