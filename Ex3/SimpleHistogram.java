@@ -45,23 +45,3 @@ class Histogram1 implements Histogram {
         return counts.length;
     }
 }
-
-class Histogram2 implements Histogram {
-    private int[] counts;
-
-    public Histogram1(int span) {
-        this.counts = new int[span];
-    }
-
-    public void increment(int item) {
-        ++counts[item];
-    }
-
-    public int getCount(int item) {
-        return counts[item];
-    }
-    
-    public int getSpan() {
-        return counts.length;
-    }
-}
