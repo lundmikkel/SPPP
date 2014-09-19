@@ -35,33 +35,3 @@ the <code>increment</code> method.
 Histogram4:
 While copying the AtomicIntegerArray we use the lock of the 
 AtomicIntegerArray to ensure that we return a fixed snapshot.
-
-
-Question 6
-----------
-
-
-
-
-Exercise 3.2
-============
-
-Question 1
-----------
-
-
-
-Question 2
-----------
-
-
-
-Question 3
-----------
-
-
-
-Question 4
-----------
-
-
