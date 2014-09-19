@@ -3,6 +3,8 @@
 // (Much simplified from CountprimesMany.java)
 // sestoft@itu.dk * 2014-08-31
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public class TestCountPrimesThreads {
   public static void main(String[] args) {
     SystemInfo();
@@ -49,7 +51,7 @@ public class TestCountPrimesThreads {
   // General parallel solution, using multiple threads
   private static long countParallelN(int range, int threadCount) {
     final int perThread = range / threadCount;
-    final LongCounter lc = new LongCounter();
+    final AtomicLong lc = new AtomicLong();
     Thread[] threads = new Thread[threadCount];
     for (int t=0; t<threadCount; t++) {
       final int from = perThread * t, 
@@ -57,7 +59,7 @@ public class TestCountPrimesThreads {
       threads[t] = new Thread(new Runnable() { public void run() {
         for (int i=from; i<to; i++)
           if (isPrime(i))
-            lc.increment();
+            lc.getAndIncrement();
       }});
     }
     for (int t=0; t<threadCount; t++) 
@@ -126,7 +128,9 @@ public class TestCountPrimesThreads {
                       System.getProperty("java.vendor"), 
                       System.getProperty("java.version"));
     // This line works only on MS Windows:
-    System.out.printf("# CPU:  %s%n", System.getenv("PROCESSOR_IDENTIFIER"));
+    //System.out.printf("# CPU:  %s%n", System.getenv("PROCESSOR_IDENTIFIER"));
+    System.out.println("# CPU:  2,3 GHz Intel Core i7");
+    System.out.println("# RAM:  16 GB 1600 MHz DDR3");
     java.util.Date now = new java.util.Date();
     System.out.printf("# Date: %s%n", 
       new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(now));
