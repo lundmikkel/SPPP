@@ -17,9 +17,9 @@ same.
 Question 2
 ----------
 Our results are stored in the benchmarks folder. Our benchmarks of mark7 shows
-that the stronger computer (Ex4_2_1) is faster than (Ex4_2_2) as expected. It is
-a little strange that the deviation of Ex4_2_2 is consistently larger than the
-other. This could be because the computer running Ex4_2_2 having more programs
+that the stronger computer (Ex4_1_2_1) is faster than (Ex4_1_2_2) as expected. It is
+a little strange that the deviation of Ex4_1_2_2 is consistently larger than the
+other. This could be because the computer running Ex4_1_2_2 having more programs
 running and thus each of the benchmark runs doesn't have the same basis.
 
 Exercise 4.2
@@ -64,7 +64,9 @@ likely optimized and thoroughly tested.
 
 Question 5
 ----------
+We experienced that our modified version was slower than the original version.
 
+We cannot argument for this strange behaviour.
 
 Exercise 4.4
 ============
