@@ -1,0 +1,6 @@
+# OS:   Mac OS X; 10.9.4; x86_64
+# JVM:  Oracle Corporation; 1.8.0_20
+# CPU:  2,3 GHz Intel Core i7
+# RAM:  16 GB 1600 MHz DDR3
+# Date: 2014-09-19T10:09:35+0200
+5616,0 ns
