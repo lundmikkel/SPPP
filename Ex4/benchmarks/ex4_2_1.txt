@@ -1,0 +1,140 @@
+# OS:   Mac OS X; 10.9.4; x86_64
+# JVM:  Oracle Corporation; 1.8.0_20
+# CPU:  2,3 GHz Intel Core i7
+# RAM:  16 GB 1600 MHz DDR3
+# Date: 2014-09-19T11:00:11+0200
+hashCode()                         1347,9 ns    2954,02          2
+hashCode()                          237,3 ns      80,10          4
+hashCode()                          659,9 ns    1357,31          8
+hashCode()                          216,0 ns     137,16         16
+hashCode()                          103,8 ns      76,75         32
+hashCode()                           78,1 ns       6,14         64
+hashCode()                           82,2 ns      11,28        128
+hashCode()                           75,3 ns       1,79        256
+hashCode()                           89,4 ns      15,82        512
+hashCode()                           48,0 ns      16,79       1024
+hashCode()                           36,8 ns       0,23       2048
+hashCode()                           36,8 ns       0,66       4096
+hashCode()                           52,7 ns       5,50       8192
+hashCode()                           28,7 ns      25,72      16384
+hashCode()                           32,2 ns      24,41      32768
+hashCode()                            3,0 ns       0,00      65536
+hashCode()                            3,0 ns       0,06     131072
+hashCode()                            3,0 ns       0,02     262144
+hashCode()                            3,0 ns       0,06     524288
+hashCode()                            3,0 ns       0,06    1048576
+hashCode()                            3,0 ns       0,05    2097152
+hashCode()                            2,9 ns       0,04    4194304
+hashCode()                            2,9 ns       0,03    8388608
+hashCode()                            2,9 ns       0,07   16777216
+hashCode()                            3,0 ns       0,07   33554432
+hashCode()                            3,0 ns       0,05   67108864
+hashCode()                            3,0 ns       0,03  134217728
+Point creation                     1116,3 ns    1873,12          2
+Point creation                      324,0 ns      64,68          4
+Point creation                      312,4 ns      64,18          8
+Point creation                      342,5 ns     134,02         16
+Point creation                      356,3 ns     156,71         32
+Point creation                      291,9 ns     206,47         64
+Point creation                      135,4 ns      57,40        128
+Point creation                      131,7 ns      28,14        256
+Point creation                      120,6 ns      15,26        512
+Point creation                      121,5 ns      28,67       1024
+Point creation                      112,8 ns       7,94       2048
+Point creation                      112,9 ns       4,15       4096
+Point creation                      106,8 ns      10,41       8192
+Point creation                       89,4 ns       3,27      16384
+Point creation                       91,1 ns       1,94      32768
+Point creation                       89,8 ns       2,34      65536
+Point creation                       90,7 ns       4,41     131072
+Point creation                       78,4 ns       4,02     262144
+Point creation                       77,3 ns       1,34     524288
+Point creation                       77,9 ns       1,33    1048576
+Point creation                       78,4 ns       1,06    2097152
+Point creation                       78,5 ns       0,73    4194304
+Thread's work                    121666,9 ns  127794,18          2
+Thread's work                     33641,9 ns     152,34          4
+Thread's work                     14432,5 ns    7678,59          8
+Thread's work                      9792,1 ns      38,32         16
+Thread's work                      9751,2 ns    2600,50         32
+Thread's work                      7250,4 ns     187,41         64
+Thread's work                      7029,6 ns     223,62        128
+Thread's work                      7088,6 ns     237,99        256
+Thread's work                      7086,7 ns      56,23        512
+Thread's work                      7071,7 ns     100,42       1024
+Thread's work                      7029,7 ns     112,12       2048
+Thread's work                      6996,3 ns     285,70       4096
+Thread's work                      7053,4 ns     210,50       8192
+Thread's work                      6911,3 ns      31,60      16384
+Thread's work                      6954,4 ns      60,50      32768
+Thread's work                      6929,8 ns      39,02      65536
+Thread create                     30873,2 ns   70933,42          2
+Thread create                      7722,5 ns    1077,54          4
+Thread create                      7693,0 ns     783,89          8
+Thread create                     10607,6 ns     777,37         16
+Thread create                      7782,3 ns    1817,02         32
+Thread create                      4471,6 ns    1278,92         64
+Thread create                      2639,0 ns     608,55        128
+Thread create                      1940,0 ns      96,30        256
+Thread create                      1751,8 ns      79,25        512
+Thread create                      1650,4 ns      72,14       1024
+Thread create                      1461,9 ns     177,51       2048
+Thread create                      1314,1 ns     114,94       4096
+Thread create                      1236,2 ns      84,70       8192
+Thread create                      1249,5 ns      71,93      16384
+Thread create                      1278,2 ns      59,20      32768
+Thread create                      1250,7 ns      28,19      65536
+Thread create                      1254,1 ns      25,96     131072
+Thread create                      1269,3 ns      28,23     262144
+Thread create start               93578,2 ns   69493,88          2
+Thread create start               64024,9 ns    8035,15          4
+Thread create start               61962,1 ns    3753,89          8
+Thread create start               59553,6 ns    6623,26         16
+Thread create start               58281,5 ns    4999,59         32
+Thread create start               55446,8 ns    4664,87         64
+Thread create start               52733,4 ns    3133,48        128
+Thread create start               50752,7 ns    1444,06        256
+Thread create start               52973,4 ns    2801,00        512
+Thread create start               50564,7 ns     863,18       1024
+Thread create start               50910,1 ns    1360,93       2048
+Thread create start               52997,6 ns    1086,95       4096
+Thread create start               54892,1 ns    2118,10       8192
+Thread create start join         173237,1 ns   76555,72          2
+Thread create start join         142728,9 ns   11376,74          4
+Thread create start join         111729,3 ns   19958,57          8
+Thread create start join          89463,6 ns   30786,60         16
+Thread create start join          82776,5 ns    5525,57         32
+Thread create start join          77454,7 ns    2249,11         64
+Thread create start join          79518,5 ns    3667,96        128
+Thread create start join          77767,5 ns    2552,88        256
+Thread create start join          76177,5 ns    1799,28        512
+Thread create start join          76131,6 ns    1538,42       1024
+Thread create start join          79323,7 ns   12224,42       2048
+Thread create start join          75652,2 ns    1088,03       4096
+ai value = 1556420000
+Uncontended lock                    189,9 ns     174,23          2
+Uncontended lock                    101,6 ns      33,90          4
+Uncontended lock                    118,9 ns      81,97          8
+Uncontended lock                    155,0 ns     208,01         16
+Uncontended lock                     87,6 ns      12,19         32
+Uncontended lock                      9,1 ns       2,30         64
+Uncontended lock                     17,3 ns      26,30        128
+Uncontended lock                      8,5 ns       1,46        256
+Uncontended lock                      8,2 ns       0,76        512
+Uncontended lock                      8,0 ns       0,33       1024
+Uncontended lock                      7,9 ns       0,16       2048
+Uncontended lock                      5,9 ns       2,03       4096
+Uncontended lock                      5,2 ns       0,01       8192
+Uncontended lock                      5,2 ns       0,00      16384
+Uncontended lock                      5,2 ns       0,00      32768
+Uncontended lock                      5,2 ns       0,01      65536
+Uncontended lock                      5,0 ns       0,03     131072
+Uncontended lock                      5,0 ns       0,08     262144
+Uncontended lock                      4,9 ns       0,05     524288
+Uncontended lock                      4,8 ns       0,12    1048576
+Uncontended lock                      4,8 ns       0,08    2097152
+Uncontended lock                      4,8 ns       0,25    4194304
+Uncontended lock                      5,1 ns       0,40    8388608
+Uncontended lock                      4,6 ns       0,11   16777216
+Uncontended lock                      4,5 ns       0,02   33554432
+Uncontended lock                      4,6 ns       0,04   67108864

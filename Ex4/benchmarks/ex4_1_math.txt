@@ -1,0 +1,14 @@
+# OS:   Mac OS X; 10.9.4; x86_64
+# JVM:  Oracle Corporation; 1.8.0_20
+# CPU:  2,3 GHz Intel Core i7
+# RAM:  16 GB 1600 MHz DDR3
+# Date: 2014-09-19T10:23:27+0200
+pow                                  79,5 ns       0,73    4194304
+exp                                  57,4 ns       0,29    8388608
+log                                  24,8 ns       0,13   16777216
+sin                                 123,2 ns       1,87    2097152
+cos                                 126,8 ns       0,40    2097152
+tan                                 157,0 ns       0,95    2097152
+asin                                237,5 ns       1,24    2097152
+acos                                226,5 ns       4,61    2097152
+atan                                 54,2 ns       0,24    8388608
