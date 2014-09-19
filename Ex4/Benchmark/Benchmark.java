@@ -4,18 +4,18 @@
 class Benchmark {
   public static void main(String[] args) {
     SystemInfo();
-    Mark0();
-    Mark1();
-    Mark2();
-    Mark3();
-    Mark4();
-    Mark5();
-    Mark6("multiply", new IntToDouble() { 
-        public double call(int i) { return multiply(i); } });
+    //Mark0();
+    //Mark1();
+    //Mark2();
+    //Mark3();
+    //Mark4();
+    //Mark5();
+    //Mark6("multiply", new IntToDouble() { 
+    //    public double call(int i) { return multiply(i); } });
     Mark7("multiply", new IntToDouble() { 
         public double call(int i) { return multiply(i); } });
-    MathFunctionBenchmarks();
-    final java.util.Random rnd = new java.util.Random();
+    //MathFunctionBenchmarks();
+/*    final java.util.Random rnd = new java.util.Random();
     final int n = 1638400;
     Mark8("random_index", new IntToDouble() { 
      public double call(int i) { return rnd.nextInt(n); } });
@@ -24,7 +24,7 @@ class Benchmark {
     SearchScalabilityBenchmarks2();
     GetPseudorandomItems();
     SortingBenchmarks();
-    SortingScalabilityBenchmarks();
+    SortingScalabilityBenchmarks();*/
   }
 
   // ========== Example functions and benchmarks ==========
