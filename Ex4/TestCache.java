@@ -24,6 +24,7 @@ public class TestCache {
                     catch (Exception ex) {
                         throw new RuntimeException(ex);
                     }
+                    System.out.println("count: " + f.getCount());
 
                     return f.getCount();
                 }

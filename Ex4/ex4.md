@@ -73,34 +73,30 @@ We cannot argument for this strange behaviour.
 Exercise 4.4
 ============
 
-Question 1
+Question 1-6
 ----------
 
-
-Question 2
-----------
-
-
-Question 3
-----------
-
-
-Question 4
-----------
-
-
-Question 5
-----------
-
-
-Question 6
-----------
-
+    Memoizer1                    1871977212,6 ns     29854323,13          2
+    Memoizer2                    1405574646,1 ns     52687573,52          2
+    Memoizer3                     999874912,2 ns     22564365,87          2
+    Memoizer4                     993271221,6 ns     26108494,08          2
+    Memoizer5                     977745474,8 ns     32062326,46          2
+    Memoizer                      986815814,1 ns     24626683,76          2
 
 Question 7
 ----------
+We expected the first memoizer to be the slowest, as it blocks on the factorizer 
+call. Though the second one doesn't block during the computation, it has a large 
+risk of doing the same computation more than once, thereby spending time on 
+unneccessary computations. The third version avoids the duplicate computations, 
+but might create unnecessary <code>FutureTask</code> objects, which, as the 
+second version, spends time on an unneccessary computation (the object 
+construction), though the computation here is faster. The fourth and fifth 
+version avoids these extra object constructions completely and blocks minimally.
 
+As expected we see a larger improvement from the first cache version to the 
+second, and again from the second to the third. The last three versions are 
+almost identically, as the only thing removed, is the extra construction of 
+small unneccessary objects.
 
-Question 8
-----------
-
+The benchmarks correspond well with our expectations and with the literature.
