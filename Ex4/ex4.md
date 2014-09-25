@@ -47,7 +47,7 @@ Question 1
 
 Question 2
 ----------
-The visual graphs of the result is saved as Ex4_3_2.
+The visual graphs of the result is saved as Ex4_3_2.png.
 
 Question 3
 ----------
@@ -61,6 +61,8 @@ There is no significant difference in the performance between AtomicLong and
 LongCounter - if anything, AtmoicLong is a little bit faster.
 When adequate built-in classes are available one should use them. They are most
 likely optimized and thoroughly tested.
+
+The graph of the implementation using Atomic long is saved in Ex4_3_4.png
 
 Question 5
 ----------
