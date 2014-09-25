@@ -12,82 +12,45 @@ import java.util.function.Function;
 
 public class TestCache {
     public static void main(String[] args) throws InterruptedException {
-        Factorizer f = new Factorizer();
-        Mark7("Memoizer1", new ExerciseFactorizer(new Memoizer1<Long, long[]>(f)));
-        Mark7("Memoizer2", new ExerciseFactorizer(new Memoizer2<Long, long[]>(f)));
-        Mark7("Memoizer3", new ExerciseFactorizer(new Memoizer3<Long, long[]>(f)));
-        Mark7("Memoizer4", new ExerciseFactorizer(new Memoizer4<Long, long[]>(f)));
-        Mark7("Memoizer5", new ExerciseFactorizer(new Memoizer5<Long, long[]>(f)));
-        Mark7("Memoizer", new ExerciseFactorizer(new Memoizer<Long, long[]>(f)));
-        System.out.println("Count: " + f.getCount());
-    }
+        Benchmark.Mark7(
+            "Memoizer",
+            new IntToDouble() {
+                public double call(int i) {
+                    Factorizer f = new Factorizer();
 
-    
+                    try {
+                        exerciseFactorizer(new Memoizer<Long, long[]>(f));
+                    }
+                    catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
 
-    public static long Mark7(String msg, ExerciseFactorizer c) {
-        int n = 10,
-            count = 1,
-            totalCount = 0;
-        long dummy = 0L;
-        double runningTime = 0.0,
-            st = 0.0,
-            sst = 0.0;
-
-        do { 
-            count *= 2;
-            st = sst = 0.0;
-            for (int j=0; j<n; j++) {
-                Timer t = new Timer();
-                for (int i=0; i<count; i++) 
-                    dummy += c.call();
-                runningTime = t.check();
-                double time = runningTime * 1e9 / count; // nanoseconds
-                st += time; 
-                sst += time * time;
-                totalCount += count;
+                    return f.getCount();
+                }
             }
-        }
-        while (runningTime < 1.0 && count < Integer.MAX_VALUE/2);
-        
-        double mean = st/n, sdev = Math.sqrt(sst/n - mean*mean);
-        System.out.printf("%-25s %15.1f ns %10.2f %10d%n", msg, mean, sdev, count);
-        
-        return dummy;
+        );
     }
 
-    private static void print(long[] arr) {
-        for (long x : arr) 
-            System.out.print(" " + x);
-        System.out.println();
-    }
-}
-
-class ExerciseFactorizer implements Callable<Long> {
-    private Computable<Long, long[]> c;
-    private AtomicLong dummy = new AtomicLong(0);
-
-    public ExerciseFactorizer(Computable<Long, long[]> c) {
-        this.c = c;
-    }
-
-    public Long call() {
+    private static void exerciseFactorizer(Computable<Long, long[]> f) throws InterruptedException {
         final int threadCount = 16;
         final Thread[] threads = new Thread[threadCount];
-        long range = 2_000L;
-        long from = 10_000_000_000L;
-        long to = from + range;
-
+        final long start = 10_000_000_000L;
+        final long range = 2_000L;
+        
         for (int t = 0; t < threadCount; ++t) {
-            long threadFrom = to + 500 * t;
+            final long from1 = start;
+            final long to1 = from1 + range;
+
+            final long from2 = start + range + t * range / 4;
+            final long to2 = from2 + range;
 
             threads[t] = new Thread(() ->  {
                 try {
-                    for (long i = from; i < to; ++i)
-                        dummy.addAndGet(c.compute(i).length);
+                    for (long i = from1; i < to1; ++i)
+                        f.compute(i);
 
-                    long threadTo = threadFrom + range;
-                    for (long i = threadFrom; i < threadTo; ++i)
-                        dummy.addAndGet(c.compute(i).length);
+                    for (long i = from2; i < to2; ++i)
+                        f.compute(i);
                 }
                 catch (Exception exn) {
                     throw new RuntimeException(exn);
@@ -96,7 +59,7 @@ class ExerciseFactorizer implements Callable<Long> {
         }
 
         for (int t = 0; t < threadCount; ++t) {
-            threads[t].run();    
+            threads[t].start();    
         }
 
         try {
@@ -106,19 +69,16 @@ class ExerciseFactorizer implements Callable<Long> {
         }
         catch (InterruptedException exn)
         {}
+    }
 
-        return dummy.get();
+    private static void print(long[] arr) {
+        for (long x : arr) 
+            System.out.print(" " + x);
+        System.out.println();
     }
 }
 
-  
-class Timer {
-  private long start, spent = 0;
-  public Timer() { play(); }
-  public double check() { return (System.nanoTime()-start+spent)/1e9; }
-  public void pause() { spent += System.nanoTime()-start; }
-  public void play() { start = System.nanoTime(); }
-}
+
 
 
 // Interface that represents a function from A to V
