@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 public class TestCache {
 	public static void main(String[] args) throws InterruptedException {
-		Computable<Long, long[]> factorizer = new Factorizer(),
+		/*Computable<Long, long[]> factorizer = new Factorizer(),
 			cachingFactorizer = new Memoizer5<Long,long[]>(factorizer);
 		// cachingFactorizer = factorizer;
 		
@@ -29,7 +29,47 @@ public class TestCache {
 		print(cachingFactorizer.compute(p));
 		print(cachingFactorizer.compute(p));
 		print(cachingFactorizer.compute(p));
-		print(cachingFactorizer.compute(p));
+		print(cachingFactorizer.compute(p));*/
+		Factorizer f = new Factorizer();
+		Computable<Long, long[]> c = new Memoizer5<Long, long[]>(f);
+		exerciseFactorizer(c);
+		System.out.println("Count: " + f.getCount());
+	}
+
+	private static void exerciseFactorizer(Computable<Long, long[]> c) {
+		System.out.println(c.getClass());
+
+		final int threadCount = 16;
+        final Thread[] threads = new Thread[threadCount];
+		long range = 20_000L;
+        long from = 10_000_000_000L;
+		long to = from + range;
+
+		for (int t = 0; t < threadCount; ++t) {
+			long threadFrom = to + 5_000 * (t);
+
+			threads[t] = new Thread(() ->  {
+				try {
+					for (long i = from; i < to; ++i)
+		                c.compute(i);
+
+		            long threadTo = threadFrom + range;
+		            for (long i = threadFrom; i < threadTo; ++i)
+		                c.compute(i);
+				}
+				catch (Exception exn) {
+					throw new RuntimeException(exn);
+				}
+			});
+			threads[t].run();
+		}
+		try {
+			for (int t = 0; t < threadCount; ++t) {
+				threads[t].join();
+			}
+        }
+        catch (InterruptedException exn)
+        {}
 	}
 
 	private static void print(long[] arr) {
@@ -59,10 +99,11 @@ class Factorizer implements Computable<Long, long[]> {
 		long k = 2;
 		while (p >= k * k) {
 			if (p % k == 0) {
-	factors.add(k);
-	p /= k;
-			} else 
-	k++;
+				factors.add(k);
+				p /= k;
+			}
+			else 
+				k++;
 		}
 		// Now k * k > p and no number in 2..k divides p
 		factors.add(p);
@@ -222,12 +263,7 @@ class Memoizer5<A, V> implements Computable<A, V> {
 			arg,
 			new Function<A, Future<V>>() { 
 				public Future<V> apply(final A arg) {
-					Callable<V> eval = new Callable<V>() {
-						public V call() throws InterruptedException {
-							return c.compute(arg);
-						}
-					};
-					ftr.set(new FutureTask<V>(eval));
+					ftr.set(new FutureTask<V>(() -> c.compute(arg)));
 					return ftr.get();
 				}
 			}
