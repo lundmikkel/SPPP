@@ -67,11 +67,9 @@ Question 3
 
 Question 4
 ----------
-
-
-Question 5
-----------
-
+A parallel run of tasks is only as past as the slowest executed task. This means
+if 22 of the urls take 1 second to execute and the last takes 3 seconds, then
+the total execution time will be 3 seconds.
 
 Exercise 5.4
 ============
