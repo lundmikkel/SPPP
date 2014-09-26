@@ -30,15 +30,40 @@ public class TestDownload {
 
 	public static void main(String[] args) throws IOException {
 		Timer t = new Timer();
-		Map<String, String> pages = getPages(urls, 200);
+		Map<String, String> pages = getPagesParallel(urls, 200);
 		System.out.println(t.check());
 
-		for(Map.Entry<String, String> entry : pages.entrySet()){
-			System.out.printf("%-25s %6d\n", entry.getKey(), entry.getValue().length());
-		}
+		//for(Map.Entry<String, String> entry : pages.entrySet()){
+		//	System.out.printf("%-25s %6d\n", entry.getKey(), entry.getValue().length());
+		//}
 	}
 
-	public static Map<String, String> getPagesParallel(String[] urls, int maxLines) throws IOException {
+	public static Map<String, String> getPagesParallel(final String[] urls, int maxLines) throws IOException {
+		int taskCount = urls.length;
+		List<Callable<Map.Entry<String, String>>> tasks = new ArrayList<>(taskCount);
+
+		for (int t = 0; t < taskCount; ++t) {
+			final String url = urls[t];
+			tasks.add(() -> {
+				return new AbstractMap.SimpleEntry<String, String>(url, getPage(url, maxLines));
+			});
+		}
+
+		Map<String, String> pages = new HashMap<>(taskCount);
+		try {
+			List<Future<Map.Entry<String, String>>> futures = executor.invokeAll(tasks);
+			for (Future<Map.Entry<String, String>> future : futures) {
+				Map.Entry<String, String> page = future.get();
+				pages.put(page.getKey(), page.getValue());
+			}
+		}
+	    catch (Exception exn) { 
+	    	System.out.println("Interrupted: " + exn);
+	    }
+	    return pages;
+	}
+
+	/*public static Map<String, String> getPagesParallel(String[] urls, int maxLines) throws IOException {
 		List<Callable<Map<String, String>>> tasks = new ArrayList<Callable<Map<String, String>>>();
 		Map<String, String> result = new HashMap<String,String>(urls.length);
 		
@@ -59,7 +84,7 @@ public class TestDownload {
 	     catch (InterruptedException exn) { 
 	      System.out.println("Interrupted: " + exn);
 	    }
-	}
+	}*/
 
 	public static Map<String, String> getPages(String[] urls, int maxLines) throws IOException {
 		Map<String, String> map = new HashMap<String,String>(urls.length);
