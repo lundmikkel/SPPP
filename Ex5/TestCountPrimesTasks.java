@@ -10,17 +10,15 @@
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
 
 public class TestCountPrimesTasks {
-    private static final ExecutorService executor 
-    = Executors.newWorkStealingPool();
+    private static final ExecutorService executor
     //= Executors.newCachedThreadPool();
+    = Executors.newWorkStealingPool();
+    private static final ExecutorService executor2 = Executors.newWorkStealingPool();
     
     public static void main(String[] args) {
         SystemInfo();
@@ -48,18 +46,26 @@ public class TestCountPrimesTasks {
         //                    return countParallelN3(range, taskCount);
         //                }}));
         
-
-        for (int c=1; c<=100; c++) {
+        int count = 32;
+        for (int c=1; c<=count; c++) {
           final int taskCount = c;
-          Mark7(String.format("countParTask1 %6d", taskCount), 
+          Mark7(String.format("countParThread %6d", taskCount), 
+            new IntToDouble() {
+              public double call(int i) { 
+                return countParallelN(range, taskCount);
+              }});
+        }
+        for (int c=1; c<=count; c++) {
+          final int taskCount = c;
+          Mark7(String.format("countParTask1  %6d", taskCount), 
             new IntToDouble() {
               public double call(int i) { 
                 return countParallelN1(range, taskCount);
               }});
         }
-        for (int c=1; c<=100; c++) {
+        for (int c=1; c<=count; c++) {
           final int taskCount = c;
-          Mark7(String.format("countParTask2 %6d", taskCount), 
+          Mark7(String.format("countParTask2  %6d", taskCount), 
             new IntToDouble() {
               public double call(int i) { 
                 return countParallelN2(range, taskCount);
@@ -84,10 +90,33 @@ public class TestCountPrimesTasks {
         return count;
     }
 
+    // General parallel solution, using multiple threads
+    private static long countParallelN(int range, int threadCount) {
+        final int perThread = range / threadCount;
+        final AtomicLong lc = new AtomicLong();
+        Thread[] threads = new Thread[threadCount];
+        for (int t=0; t<threadCount; t++) {
+            final int from = perThread * t, 
+                to = (t+1==threadCount) ? range : perThread * (t+1); 
+            threads[t] = new Thread(new Runnable() { public void run() {
+            for (int i=from; i<to; i++)
+                if (isPrime(i))
+                    lc.getAndIncrement();
+            }});
+        }
+        for (int t=0; t<threadCount; t++) 
+        threads[t].start();
+        try {
+            for (int t=0; t<threadCount; t++) 
+            threads[t].join();
+        } catch (InterruptedException exn) { }
+        return lc.get();
+    }
+
     // General parallel solution, using multiple Runnable tasks
     private static long countParallelN1(int range, int taskCount) {
         final int perTask = range / taskCount;
-        final LongCounter lc = new LongCounter();
+        final AtomicLong lc = new AtomicLong();
         List<Future<?>> futures = new ArrayList<Future<?>>();
         for (int t=0; t<taskCount; t++) {
             final int from = perTask * t, 
@@ -95,7 +124,7 @@ public class TestCountPrimesTasks {
             futures.add(executor.submit(() -> { 
                 for (int i=from; i<to; i++)
                     if (isPrime(i))
-                        lc.increment();
+                        lc.getAndIncrement();
             }));
         }
         try {
