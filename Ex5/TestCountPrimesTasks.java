@@ -18,214 +18,220 @@ import java.util.concurrent.Future;
 
 
 public class TestCountPrimesTasks {
-  private static final ExecutorService executor 
+    private static final ExecutorService executor 
     = Executors.newWorkStealingPool();
-  //  = Executors.newCachedThreadPool();
-  
-  public static void main(String[] args) {
-    SystemInfo();
-    final int range = 100_000;
-    System.out.println(Mark7("countSequential", new IntToDouble() {
-        public double call(int i) { 
-          return countSequential(range);
-        }}));
-    System.out.println(Mark7(String.format("countParTask1 %6d", 32), 
-       new IntToDouble() {
-         public double call(int i) { 
-           return countParallelN1(range, 32);
-         }}));
-    System.out.println(Mark7(String.format("countParTask2 %6d", 32), 
-       new IntToDouble() {
-         public double call(int i) { 
-           return countParallelN2(range, 32);
-         }}));
-    System.out.println(Mark7(String.format("countParTask3 %6d", 32), 
-          new IntToDouble() {
-            public double call(int i) { 
-              return countParallelN3(range, 32);
-            }}));
-    // for (int c=1; c<=100; c++) {
-    //   final int taskCount = c;
-    //   Mark7(String.format("countParTask1 %6d", taskCount), 
-    //     new IntToDouble() {
-    //       public double call(int i) { 
-    //         return countParallelN1(range, taskCount);
-    //       }});
-    // }
-    // for (int c=1; c<=100; c++) {
-    //   final int taskCount = c;
-    //   Mark7(String.format("countParTask2 %6d", taskCount), 
-    //     new IntToDouble() {
-    //       public double call(int i) { 
-    //         return countParallelN2(range, taskCount);
-    //       }});
-    // }
-  }
+    //= Executors.newCachedThreadPool();
+    
+    public static void main(String[] args) {
+        SystemInfo();
+        final int range = 100_000;
 
-  private static boolean isPrime(int n) {
-    int k = 2;
-    while (k * k <= n && n % k != 0)
-      k++;
-    return n >= 2 && k * k > n;
-  }
 
-  // Sequential solution
-  private static long countSequential(int range) {
-    long count = 0;
-    final int from = 0, to = range;
-    for (int i=from; i<to; i++)
-      if (isPrime(i)) 
-        count++;
-    return count;
-  }
+        //int taskCount = 32;
+        //System.out.println(Mark7("countSequential", new IntToDouble() {
+        //        public double call(int i) { 
+        //            return countSequential(range);
+        //        }}));
+        //System.out.println(Mark7(String.format("countParTask1 %6d", taskCount), 
+        //     new IntToDouble() {
+        //         public double call(int i) { 
+        //             return countParallelN1(range, taskCount);
+        //         }}));
+        //System.out.println(Mark7(String.format("countParTask2 %6d", taskCount), 
+        //     new IntToDouble() {
+        //         public double call(int i) { 
+        //             return countParallelN2(range, taskCount);
+        //         }}));
+        //System.out.println(Mark7(String.format("countParTask3 %6d", taskCount), 
+        //            new IntToDouble() {
+        //                public double call(int i) { 
+        //                    return countParallelN3(range, taskCount);
+        //                }}));
+        
 
-  // General parallel solution, using multiple Runnable tasks
-  private static long countParallelN1(int range, int taskCount) {
-    final int perTask = range / taskCount;
-    final LongCounter lc = new LongCounter();
-    List<Future<?>> futures = new ArrayList<Future<?>>();
-    for (int t=0; t<taskCount; t++) {
-      final int from = perTask * t, 
-        to = (t+1 == taskCount) ? range : perTask * (t+1); 
-      futures.add(executor.submit(new Runnable() { public void run() { 
-          for (int i=from; i<to; i++)
-            if (isPrime(i))
-              lc.increment();
-      }}));
+        for (int c=1; c<=100; c++) {
+          final int taskCount = c;
+          Mark7(String.format("countParTask1 %6d", taskCount), 
+            new IntToDouble() {
+              public double call(int i) { 
+                return countParallelN1(range, taskCount);
+              }});
+        }
+        for (int c=1; c<=100; c++) {
+          final int taskCount = c;
+          Mark7(String.format("countParTask2 %6d", taskCount), 
+            new IntToDouble() {
+              public double call(int i) { 
+                return countParallelN2(range, taskCount);
+              }});
+        }
     }
-    try {
-      for (Future<?> fut : futures)
-        fut.get();
-    } catch (InterruptedException exn) { 
-      System.out.println("Interrupted: " + exn);
-    } catch (ExecutionException exn) { 
-      throw new RuntimeException(exn.getCause()); 
-    }
-    return lc.get();
-  }
 
-  // General parallel solution, using multiple Callable<Long> tasks
-  private static long countParallelN2(int range, int taskCount) {
-    final int perTask = range / taskCount;
-    List<Callable<Long>> tasks = new ArrayList<Callable<Long>>();
-    for (int t=0; t<taskCount; t++) {
-      final int from = perTask * t, 
-        to = (t+1 == taskCount) ? range : perTask * (t+1); 
-      tasks.add(new Callable<Long>() { public Long call() { 
-        long count = 0;  // Task-local counter
+    private static boolean isPrime(int n) {
+        int k = 2;
+        while (k * k <= n && n % k != 0)
+            k++;
+        return n >= 2 && k * k > n;
+    }
+
+    // Sequential solution
+    private static long countSequential(int range) {
+        long count = 0;
+        final int from = 0, to = range;
         for (int i=from; i<to; i++)
-          if (isPrime(i))
-            count++;
+            if (isPrime(i)) 
+                count++;
         return count;
-      }});
     }
-    long result = 0;
-    try {
-      List<Future<Long>> futures = executor.invokeAll(tasks);
-      for (Future<Long> fut : futures)
-	result += fut.get();
-    } catch (InterruptedException exn) { 
-      System.out.println("Interrupted: " + exn);
-    } catch (ExecutionException exn) { 
-      throw new RuntimeException(exn.getCause()); 
+
+    // General parallel solution, using multiple Runnable tasks
+    private static long countParallelN1(int range, int taskCount) {
+        final int perTask = range / taskCount;
+        final LongCounter lc = new LongCounter();
+        List<Future<?>> futures = new ArrayList<Future<?>>();
+        for (int t=0; t<taskCount; t++) {
+            final int from = perTask * t, 
+                to = (t+1 == taskCount) ? range : perTask * (t+1); 
+            futures.add(executor.submit(() -> { 
+                for (int i=from; i<to; i++)
+                    if (isPrime(i))
+                        lc.increment();
+            }));
+        }
+        try {
+            for (Future<?> fut : futures)
+                fut.get();
+        } catch (InterruptedException exn) { 
+            System.out.println("Interrupted: " + exn);
+        } catch (ExecutionException exn) { 
+            throw new RuntimeException(exn.getCause()); 
+        }
+        return lc.get();
     }
-    return result;
-  }
 
-  // General parallel solution, using multiple Callable<Void> tasks so
-  // as to be able to submit all to the executor in one method call.
-  private static long countParallelN3(int range, int taskCount) {
-    final int perTask = range / taskCount;
-    final LongCounter lc = new LongCounter();
-    List<Callable<Void>> tasks = new ArrayList<Callable<Void>>();
-    for (int t=0; t<taskCount; t++) {
-      final int from = perTask * t, 
-        to = (t+1 == taskCount) ? range : perTask * (t+1); 
-      tasks.add(new Callable<Void>() { public Void call() { 
-          for (int i=from; i<to; i++)
-            if (isPrime(i))
-              lc.increment();
-          return null;
-      }});
+    // General parallel solution, using multiple Callable<Long> tasks
+    private static long countParallelN2(int range, int taskCount) {
+        final int perTask = range / taskCount;
+        List<Callable<Long>> tasks = new ArrayList<Callable<Long>>();
+        for (int t=0; t<taskCount; t++) {
+            final int from = perTask * t, 
+                to = (t+1 == taskCount) ? range : perTask * (t+1); 
+            tasks.add(() -> { 
+                long count = 0;  // Task-local counter
+                for (int i=from; i<to; i++)
+                    if (isPrime(i))
+                        count++;
+                return count;
+            });
+        }
+        long result = 0;
+        try {
+            List<Future<Long>> futures = executor.invokeAll(tasks);
+            for (Future<Long> fut : futures)
+                result += fut.get();
+        } catch (InterruptedException exn) { 
+            System.out.println("Interrupted: " + exn);
+        } catch (ExecutionException exn) { 
+            throw new RuntimeException(exn.getCause()); 
+        }
+        return result;
     }
-    try {
-      executor.invokeAll(tasks);
-    } catch (InterruptedException exn) { 
-      System.out.println("Interrupted: " + exn);
-    } 
-    return lc.get();
-  }
 
-  // --- Benchmarking infrastructure ---
+    // General parallel solution, using multiple Callable<Void> tasks so
+    // as to be able to submit all to the executor in one method call.
+    private static long countParallelN3(int range, int taskCount) {
+        final int perTask = range / taskCount;
+        final LongCounter lc = new LongCounter();
+        List<Callable<Void>> tasks = new ArrayList<Callable<Void>>();
+        for (int t=0; t<taskCount; t++) {
+            final int from = perTask * t, 
+                to = (t+1 == taskCount) ? range : perTask * (t+1); 
+            tasks.add(() -> { 
+                for (int i=from; i<to; i++)
+                    if (isPrime(i))
+                        lc.increment();
+                return null;
+            });
+        }
+        try {
+            executor.invokeAll(tasks);
+        } catch (InterruptedException exn) { 
+            System.out.println("Interrupted: " + exn);
+        } 
+        return lc.get();
+    }
 
-  // NB: Modified to show microseconds instead of nanoseconds
+    // --- Benchmarking infrastructure ---
 
-  public static double Mark6(String msg, IntToDouble f) {
-    int n = 10, count = 1, totalCount = 0;
-    double dummy = 0.0, runningTime = 0.0, st = 0.0, sst = 0.0;
-    do { 
-      count *= 2;
-      st = sst = 0.0;
-      for (int j=0; j<n; j++) {
-        Timer t = new Timer();
-        for (int i=0; i<count; i++) 
-          dummy += f.call(i);
-        runningTime = t.check();
-        double time = runningTime * 1e6 / count; // microseconds
-        st += time; 
-        sst += time * time;
-        totalCount += count;
-      }
-      double mean = st/n, sdev = Math.sqrt(sst/n - mean*mean);
-      System.out.printf("%-25s %15.1f us %10.2f %10d%n", msg, mean, sdev, count);
-    } while (runningTime < 0.25 && count < Integer.MAX_VALUE/2);
-    return dummy / totalCount;
-  }
+    // NB: Modified to show microseconds instead of nanoseconds
 
-  public static double Mark7(String msg, IntToDouble f) {
-    int n = 10, count = 1, totalCount = 0;
-    double dummy = 0.0, runningTime = 0.0, st = 0.0, sst = 0.0;
-    do { 
-      count *= 2;
-      st = sst = 0.0;
-      for (int j=0; j<n; j++) {
-        Timer t = new Timer();
-        for (int i=0; i<count; i++) 
-          dummy += f.call(i);
-        runningTime = t.check();
-        double time = runningTime * 1e6 / count; // microseconds
-        st += time; 
-        sst += time * time;
-        totalCount += count;
-      }
-    } while (runningTime < 0.25 && count < Integer.MAX_VALUE/2);
-    double mean = st/n, sdev = Math.sqrt(sst/n - mean*mean);
-    System.out.printf("%-25s %15.1f us %10.2f %10d%n", msg, mean, sdev, count);
-    return dummy / totalCount;
-  }
+    public static double Mark6(String msg, IntToDouble f) {
+        int n = 10, count = 1, totalCount = 0;
+        double dummy = 0.0, runningTime = 0.0, st = 0.0, sst = 0.0;
+        do { 
+            count *= 2;
+            st = sst = 0.0;
+            for (int j=0; j<n; j++) {
+                Timer t = new Timer();
+                for (int i=0; i<count; i++) 
+                    dummy += f.call(i);
+                runningTime = t.check();
+                double time = runningTime * 1e6 / count; // microseconds
+                st += time; 
+                sst += time * time;
+                totalCount += count;
+            }
+            double mean = st/n, sdev = Math.sqrt(sst/n - mean*mean);
+            System.out.printf("%-25s %15.1f us %10.2f %10d%n", msg, mean, sdev, count);
+        } while (runningTime < 0.25 && count < Integer.MAX_VALUE/2);
+        return dummy / totalCount;
+    }
 
-  public static void SystemInfo() {
-    System.out.printf("# OS:   %s; %s; %s%n", 
-                      System.getProperty("os.name"), 
-                      System.getProperty("os.version"), 
-                      System.getProperty("os.arch"));
-    System.out.printf("# JVM:  %s; %s%n", 
-                      System.getProperty("java.vendor"), 
-                      System.getProperty("java.version"));
-    // This line works only on MS Windows:
-    System.out.printf("# CPU:  %s%n", System.getenv("PROCESSOR_IDENTIFIER"));
-    java.util.Date now = new java.util.Date();
-    System.out.printf("# Date: %s%n", 
-      new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(now));
-  }
+    public static double Mark7(String msg, IntToDouble f) {
+        int n = 10, count = 1, totalCount = 0;
+        double dummy = 0.0, runningTime = 0.0, st = 0.0, sst = 0.0;
+        do { 
+            count *= 2;
+            st = sst = 0.0;
+            for (int j=0; j<n; j++) {
+                Timer t = new Timer();
+                for (int i=0; i<count; i++) 
+                    dummy += f.call(i);
+                runningTime = t.check();
+                double time = runningTime * 1e6 / count; // microseconds
+                st += time; 
+                sst += time * time;
+                totalCount += count;
+            }
+        } while (runningTime < 0.25 && count < Integer.MAX_VALUE/2);
+        double mean = st/n, sdev = Math.sqrt(sst/n - mean*mean);
+        System.out.printf("%-25s %15.1f us %10.2f %10d%n", msg, mean, sdev, count);
+        return dummy / totalCount;
+    }
+
+    public static void SystemInfo() {
+        System.out.printf("# OS:   %s; %s; %s%n", 
+                                            System.getProperty("os.name"), 
+                                            System.getProperty("os.version"), 
+                                            System.getProperty("os.arch"));
+        System.out.printf("# JVM:  %s; %s%n", 
+                                            System.getProperty("java.vendor"), 
+                                            System.getProperty("java.version"));
+        // Hardcoded for Mikkel's machine
+        System.out.println("# CPU:  2,3 GHz Intel Core i7");
+        System.out.println("# RAM:  16 GB 1600 MHz DDR3");
+        java.util.Date now = new java.util.Date();
+        System.out.printf("# Date: %s%n", 
+            new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(now));
+    }
 }
 
 class LongCounter {
-  private long count = 0;
-  public synchronized void increment() {
-    count = count + 1;
-  }
-  public synchronized long get() { 
-    return count; 
-  }
+    private long count = 0;
+    public synchronized void increment() {
+        count = count + 1;
+    }
+    public synchronized long get() { 
+        return count; 
+    }
 }
