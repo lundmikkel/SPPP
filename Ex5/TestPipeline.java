@@ -54,13 +54,12 @@ public class TestPipeline {
 		//Thread t5 = new Thread(new LinkPrinter(uniqueRefPairs));
 		//t1.start(); t2.start(); t3.start(); t4.start(); t5.start();
 
-		//TODO: This doesn't work. We need to make some kind of loop so that the program never ends to see the results
+		//TODO: This doesn't work...
 		executor.execute(new UrlProducer(urls));
 		executor.execute(new PageGetter(urls, pages));
 		executor.execute(new LinkScanner(pages, refPairs));
 		executor.execute(new Uniquifier<Link>(refPairs, uniqueRefPairs));
 		executor.execute(new LinkPrinter(uniqueRefPairs));
-		while(true);
 	}
 }
 
