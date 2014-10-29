@@ -180,7 +180,8 @@ class Benchmark {
                       System.getProperty("java.vendor"), 
                       System.getProperty("java.version"));
     // This line works only on MS Windows:
-    System.out.printf("# CPU:  %s%n", System.getenv("PROCESSOR_IDENTIFIER"));
+    System.out.println("# CPU:  2,3 GHz Intel Core i7");
+    System.out.println("# RAM:  16 GB 1600 MHz DDR3");
     java.util.Date now = new java.util.Date();
     System.out.printf("# Date: %s%n", 
       new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").format(now));
