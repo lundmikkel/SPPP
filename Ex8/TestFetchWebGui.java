@@ -112,7 +112,7 @@ public class TestFetchWebGui {
         });
 
         // (3) Enable cancellation
-        cancelButton.addActionListener((e) -> workers.forEach((w) -> w.cancel(false)));
+        cancelButton.addActionListener((e) -> workers.forEach((w) -> w.cancel(true)));
         frame.pack();
         frame.setVisible(true);
     }

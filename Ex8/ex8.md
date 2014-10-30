@@ -136,12 +136,25 @@ Exercise 8.3
 
 Question 1
 ----------
-
+We chose to implement method 1 described in the assignment. We create N 
+DownloadWorker instances each downloading a singe webpage. All the 
+DownloadWorkers are executed in parallel. Their result is appended to the 
+textarea through the done method invoked on the event dispatch thread when the 
+task is completed.
 
 Question 2
 ----------
-
+For cancellation we check before starting the download whether or not the 
+SwingWorker subclass has already been cancelled. If the cancel button is 
+pressed, an ActionListener on the cancel button calls the cancel method on each 
+worker which throws an InterruptedException in the get method.
 
 Question 3
 ----------
-
+We have made a shared AtomicInteger as a counter keeping track on the running 
+tasks. This is decremented every time a DownloadWorkers <code>done</code> method
+is called and afterwards the progress bar is updated using the 
+<code>setProgress</code> method.
+We do not need the atomicity of the counter, since all the calls on it are made 
+by the event thread. It is just to allow all the workers to work of the same 
+counter.
