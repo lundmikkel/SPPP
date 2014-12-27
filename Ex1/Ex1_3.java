@@ -1,9 +1,4 @@
-package dk.itu.sppp.ex1;
-
 /**
- * @author Hyllekilde
- * Exercise 1.3
- * 
  * Question 1:
  * 1. t1.print()
  * 2. t2.print()

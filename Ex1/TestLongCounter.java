@@ -1,7 +1,5 @@
 // For week 1
 // sestoft@itu.dk * 2014-08-20
-package dk.itu.sppp.ex1;
-
 import java.io.IOException;
 
 public class TestLongCounter {

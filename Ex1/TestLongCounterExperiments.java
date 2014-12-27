@@ -1,4 +1,3 @@
-package dk.itu.sppp.ex1;
 // For week 1
 // sestoft@itu.dk * 2014-08-21
 
