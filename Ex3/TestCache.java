@@ -13,13 +13,13 @@ import java.util.function.Function;
 public class TestCache {
 	public static void main(String[] args) throws InterruptedException {
 		Factorizer f = new Factorizer();
-		exerciseFactorizer(f);
+		//exerciseFactorizer(f);
 		//exerciseFactorizer(new Memoizer1<Long, long[]>(f));
 		//exerciseFactorizer(new Memoizer2<Long, long[]>(f));
 		//exerciseFactorizer(new Memoizer3<Long, long[]>(f));
 		//exerciseFactorizer(new Memoizer4<Long, long[]>(f));
 		//exerciseFactorizer(new Memoizer5<Long, long[]>(f));
-		//exerciseFactorizer(new Memoizer<Long, long[]>(f));
+		exerciseFactorizer(new Memoizer<Long, long[]>(f));
 		System.out.println("Count: " + f.getCount());
 	}
 

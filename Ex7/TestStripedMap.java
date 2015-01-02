@@ -500,6 +500,9 @@ class StripedMap<K,V> implements OurMap<K,V> {
     public void forEach(Consumer<K,V> consumer) {
         final ItemNode<K,V>[] bs = buckets;
         for (int stripe = 0; stripe < lockCount; ++stripe) {
+            //TODO: It is not necessary to lock the stripe as the bucket reference
+            //      is final and thus cannot change during iteration. It is only
+            //      a read operation and thus no locking is needed.
             synchronized (locks[stripe]) {
                 for (int hash = stripe; hash < bs.length; hash += lockCount) {
                     ItemNode<K,V> node = bs[hash];

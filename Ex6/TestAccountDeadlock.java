@@ -28,7 +28,6 @@ public class TestAccountDeadlock {
             for (int i = 0; i < transfers; ++i) 
                 account2.transferC(account1, rnd.nextInt(10000));
         });
-
         clerk1.start();
         clerk2.start();
 

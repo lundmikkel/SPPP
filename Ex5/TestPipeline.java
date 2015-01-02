@@ -47,19 +47,19 @@ public class TestPipeline {
 		final BlockingQueue<Webpage> pages = new OneItemQueue<Webpage>();
 		final BlockingQueue<Link> refPairs = new OneItemQueue<Link>();
 		final BlockingQueue<Link> uniqueRefPairs = new OneItemQueue<Link>();
-		//Thread t1 = new Thread(new UrlProducer(urls));
-		//Thread t2 = new Thread(new PageGetter(urls, pages));
-		//Thread t3 = new Thread(new LinkScanner(pages, refPairs));
-		//Thread t4 = new Thread(new Uniquifier<Link>(refPairs, uniqueRefPairs));
-		//Thread t5 = new Thread(new LinkPrinter(uniqueRefPairs));
-		//t1.start(); t2.start(); t3.start(); t4.start(); t5.start();
+		Thread t1 = new Thread(new UrlProducer(urls));
+		Thread t2 = new Thread(new PageGetter(urls, pages));
+		Thread t3 = new Thread(new LinkScanner(pages, refPairs));
+		Thread t4 = new Thread(new Uniquifier<Link>(refPairs, uniqueRefPairs));
+		Thread t5 = new Thread(new LinkPrinter(uniqueRefPairs));
+		t1.start(); t2.start(); t3.start(); t4.start(); t5.start();
 
 		//TODO: This doesn't work...
-		executor.execute(new UrlProducer(urls));
-		executor.execute(new PageGetter(urls, pages));
-		executor.execute(new LinkScanner(pages, refPairs));
-		executor.execute(new Uniquifier<Link>(refPairs, uniqueRefPairs));
-		executor.execute(new LinkPrinter(uniqueRefPairs));
+		//executor.execute(new UrlProducer(urls));
+		//executor.execute(new PageGetter(urls, pages));
+		//executor.execute(new LinkScanner(pages, refPairs));
+		//executor.execute(new Uniquifier<Link>(refPairs, uniqueRefPairs));
+		//executor.execute(new LinkPrinter(uniqueRefPairs));
 	}
 }
 

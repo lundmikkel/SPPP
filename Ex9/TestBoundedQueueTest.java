@@ -14,10 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestBoundedQueueTest extends Tests{
   public static void main(String[] args) throws Exception {
-    // sequentialTest(new SemaphoreBoundedQueue<Integer>(3));
+    sequentialTest(new SemaphoreBoundedQueue<Integer>(3));
     parallelTest(new SemaphoreBoundedQueue<Integer>(10));
-    // sequentialTest(new LockingBoundedQueue<Integer>(3));
-    // parallelTest(new LockingBoundedQueue<Integer>(10));
+    sequentialTest(new LockingBoundedQueue<Integer>(3));
+    parallelTest(new LockingBoundedQueue<Integer>(10));
   }
 
   private static void sequentialTest(BoundedQueue<Integer> bq) throws Exception {

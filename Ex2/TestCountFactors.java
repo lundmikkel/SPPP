@@ -5,9 +5,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 class TestCountFactors {
     public static void main(String[] args) {
         int range = 50_000_000;
-        // sequential(range);
-        //countParallelN(range, 10);
-        countParallelNAtomicInteger(range, 10);
+        //countSequential(range);
+        countParallelN(range, 10);
+        //countParallelNAtomicInteger(range, 10);
     }
 
     private static void countSequential(int range) {
